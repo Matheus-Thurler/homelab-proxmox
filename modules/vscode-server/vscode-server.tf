@@ -103,17 +103,17 @@ resource "proxmox_vm_qemu" "vscode-server" {
     "echo '${file("${path.cwd}/modules/vscode-server/docker/docker-compose.yml")}' > /home/${local.cloud_init.user}/app/docker-compose.yml",
     "echo '${file("${path.cwd}/modules/vscode-server/docker/nginx.conf")}' > /home/${local.cloud_init.user}/app/nginx.conf",
     # Parar e desabilitar o systemd-resolved
-    "sudo systemctl stop systemd-resolved",
-    "sudo systemctl disable systemd-resolved",
-
-    # Adicionar configuração DNS para Docker
-    "echo '{ \"dns\": [\"8.8.8.8\", \"8.8.4.4\"] }' | sudo tee /etc/docker/daemon.json",
-
-    # Atualizar /etc/resolv.conf para usar DNS público
-    "echo -e 'nameserver 8.8.8.8\nnameserver 8.8.4.4' | sudo tee /etc/resolv.conf",
+    # "sudo systemctl stop systemd-resolved",
+    # "sudo systemctl disable systemd-resolved",
+    #
+    # # Adicionar configuração DNS para Docker
+    # "echo '{ \"dns\": [\"8.8.8.8\", \"8.8.4.4\"] }' | sudo tee /etc/docker/daemon.json",
+    #
+    # # Atualizar /etc/resolv.conf para usar DNS público
+    # "echo -e 'nameserver 8.8.8.8\nnameserver 8.8.4.4' | sudo tee /etc/resolv.conf",
 
     # Reiniciar o Docker para aplicar as novas configurações
-    "sudo systemctl restart docker",
+    # "sudo systemctl restart docker",
 
     # Subir os containers com Docker Compose
     "cd /home/${local.cloud_init.user}/app && sudo docker-compose up -d"
