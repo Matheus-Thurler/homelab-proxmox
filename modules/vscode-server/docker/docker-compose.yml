@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  vscode-server:
+    image: coder/code-server:latest
+    container_name: vscode-server
+    environment:
+      - PASSWORD=matheus  # Defina sua senha aqui para acessar o VSCode
+    volumes:
+      - vscode-data:/home/coder/project  # Diretório compartilhado para projetos
+    ports:
+      - "8080:8080"  # A porta do VSCode Server
+    networks:
+      - vscode-network
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro  # Arquivo de configuração do Nginx
+      - vscode-data:/home/coder/project  # Acesso ao mesmo volume do VSCode
+    ports:
+      - "80:80"  # Porta do Nginx para expor o VSCode Server
+    depends_on:
+      - vscode-server
+    networks:
+      - vscode-network
+    restart: unless-stopped
+
+volumes:
+  vscode-data:
+    driver: local
+
+networks:
+  vscode-network:
+    driver: bridge
