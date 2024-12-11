@@ -6,9 +6,9 @@ TERRAFORM="../../homelab-proxmox/"
 
 zip -r homelab.zip $TERRAFORM
 
-scp -i ~/.ssh/matheus/id_rsa ./Dockerfile ubuntu@$IP:/home/ubuntu/
-scp -i ~/.ssh/matheus/id_rsa ./docker-compose.yml ubuntu@$IP:/home/ubuntu/
-scp -i ~/.ssh/matheus/id_rsa ./homelab.zip ubuntu@$IP:/home/ubuntu/
+scp -i $SSH_KEY ./Dockerfile ubuntu@$IP:/home/ubuntu/
+scp -i $SSH_KEY ./docker-compose.yml ubuntu@$IP:/home/ubuntu/
+scp -i $SSH_KEY ./homelab.zip ubuntu@$IP:/home/ubuntu/
 
 
 
