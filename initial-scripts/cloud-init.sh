@@ -51,7 +51,9 @@ fi
 # Additional configurations
 echo "Applying additional configurations..."
 qm set 9001 --ide2 $STORAGE:cloudinit,media=cdrom
-qm set 9001 --boot c --bootdisk scsi0
+#qm set 9001 --boot c --bootdisk scsi0
+qm set 9001 --boot order=scsi0
+qm set 9001 --bootdisk scsi0
 qm set 9001 --serial0 socket --vga serial0
 qm set 9001 --agent enabled=1
 qm set 9001 --ipconfig0 ip=dhcp
