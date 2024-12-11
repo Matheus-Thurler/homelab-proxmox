@@ -1,5 +1,6 @@
 #!/bin/bash
 
+cd /tmp || exit || return
 # Path to the ISO file
 ISO_PATH="/tmp/noble-server-cloudimg-amd64.img"
 STORAGE="local-lvm"
@@ -22,7 +23,7 @@ virt-customize --add "$ISO_PATH" --install qemu-guest-agent
 
 # Create the VM with initial configurations
 echo "Creating the VM..."
-qm create 9001 --name ubuntu-2404-cloud-init --numa 0 --ostype l26 --cpu cputype=host --cores 2 --sockets 1 --memory 2048 --net0 virtio,bridge=vmbr0,dhcp=1
+qm create 9001 --name ubuntu-2404-cloud-init --numa 0 --ostype l26 --cpu cputype=host --cores 2 --sockets 1 --memory 2048 --net0 virtio,bridge=vmbr0
 
 # Import the disk to the $STORAGE storage
 echo "Importing the disk to $STORAGE storage..."
@@ -53,6 +54,10 @@ qm set 9001 --ide2 $STORAGE:cloudinit,media=cdrom
 qm set 9001 --boot c --bootdisk scsi0
 qm set 9001 --serial0 socket --vga serial0
 qm set 9001 --agent enabled=1
+qm set 9001 --ipconfig0 ip=dhcp
+qm set 9001 --ciuser ubuntu --cipassword ubuntu
+qm set 9001 --sshkey ./id_rsa.pub
+
 
 # Convert the VM to a template
 echo "Converting the VM to a template..."

@@ -101,7 +101,6 @@ resource "proxmox_vm_qemu" "vscode-server" {
     # Criar diretório e configurar docker-compose.yml
     "mkdir -p /home/${local.cloud_init.user}/app",
     "echo '${file("${path.cwd}/modules/vscode-server/docker/docker-compose.yml")}' > /home/${local.cloud_init.user}/app/docker-compose.yml",
-    "echo '${file("${path.cwd}/modules/vscode-server/docker/nginx.conf")}' > /home/${local.cloud_init.user}/app/nginx.conf",
     # Parar e desabilitar o systemd-resolved
     # "sudo systemctl stop systemd-resolved",
     # "sudo systemctl disable systemd-resolved",
