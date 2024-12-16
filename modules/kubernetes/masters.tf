@@ -1,4 +1,4 @@
-resource "proxmox_vm_qemu" "pi-hole" {
+resource "proxmox_vm_qemu" "masters" {
   count = local.masters.count
 
   target_node = local.proxmox_node
@@ -64,7 +64,7 @@ resource "proxmox_vm_qemu" "pi-hole" {
   connection {
     type        = "ssh"
     user        = local.cloud_init.user
-    private_key = local.cloud_init.ssh_private_key
+    private_key = file("/home/matheus/.ssh/matheus/id_rsa")
     host = cidrhost(
       local.cidr,
       local.masters.network_last_octect + count.index
@@ -76,35 +76,7 @@ resource "proxmox_vm_qemu" "pi-hole" {
 
   provisioner "remote-exec" {
     inline = [
-    "for i in {1..60}; do cloud-init status --wait && break || sleep 10; done",
-
-    # Instalar o Docker
-    "curl -fsSL https://get.docker.com -o get-docker.sh",
-    "sh get-docker.sh",
-    "sudo usermod -aG docker ${local.cloud_init.user}",
-
-    # Instalar o Docker Compose
-    "sudo apt install docker-compose -y",
-
-    # Criar diretório e configurar docker-compose.yml
-    "mkdir -p /home/${local.cloud_init.user}/app",
-    "echo '${file("${path.cwd}/modules/pi-hole/docker/docker-compose.yml")}' > /home/${local.cloud_init.user}/app/docker-compose.yml",
-
-    # Parar e desabilitar o systemd-resolved
-    "sudo systemctl stop systemd-resolved",
-    "sudo systemctl disable systemd-resolved",
-
-    # Adicionar configuração DNS para Docker
-    "echo '{ \"dns\": [\"8.8.8.8\", \"8.8.4.4\"] }' | sudo tee /etc/docker/daemon.json",
-
-    # Atualizar /etc/resolv.conf para usar DNS público
-    "echo -e 'nameserver 8.8.8.8\nnameserver 8.8.4.4' | sudo tee /etc/resolv.conf",
-
-    # Reiniciar o Docker para aplicar as novas configurações
-    "sudo systemctl restart docker",
-
-    # Subir os containers com Docker Compose
-    "cd /home/${local.cloud_init.user}/app && sudo docker-compose up -d"
+      "for i in {1..60}; do cloud-init status --wait && break || sleep 10; done"
     ]
   }
 }

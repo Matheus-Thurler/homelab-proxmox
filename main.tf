@@ -6,3 +6,7 @@ module "pi-hole" {
 module "vscode-server" {
   source = "./modules/vscode-server"
 }
+
+module "kubernetes" {
+  source = "./modules/kubernetes"
+}
