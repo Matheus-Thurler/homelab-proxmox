@@ -1,0 +1,7 @@
+providerp = {
+  pm_api_url      = "https://<PROXMOX_IP>:8006/api2/json"
+  pm_tls_insecure = true
+  pm_api_token_id = "<token id>"
+  pm_api_token_secret = "<token secret>"
+  pm_timeout = 600
+}
