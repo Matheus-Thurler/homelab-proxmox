@@ -27,6 +27,7 @@ pipeline {
             sh '''
               cp "$JENKINS_PRIV_KEY" id_rsa
               echo "$JENKINS_PUB_KEY" > id_rsa.pub
+              echo "ok"
             '''
           }
         }
